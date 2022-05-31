@@ -4,7 +4,7 @@ Donate link: https://liberapay.com/vitoranguia/
 Tags: BOM, CycloneDX, Dependency Track
 Requires at least: 4.7
 Tested up to: 6.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -100,6 +100,9 @@ $ composer update --no-dev
 1. See option page
 
 == Changelog ==
+
+= 1.2.0 =
+* Add PURL guessing using CPE dictionary
 
 = 1.1.0 =
 * Add CPE example

@@ -91,11 +91,13 @@ class OptionsPageController {
 		$url      = wp_nonce_url( $url, 'wpbom' );
 		$update   = add_query_arg( 'update', 'true', $url );
 		$download = add_query_arg( 'download', 'true', $url );
+		$cpeUpdate = add_query_arg( 'cpe', 'true', $url );
 		?>
 		<div class="custom-field-row <?php echo esc_attr( $classes ); ?>">
 			<p>
 				<a class="button button-secondary" href="<?php esc_html_e( $update ); ?>">Manual update</a>
 				<a class="button button-secondary" href="<?php esc_html_e( $download ); ?>">Download BOM file</a>
+				<a class="button button-secondary" href="<?php esc_html_e( $cpeUpdate ); ?>" title="For PURL component lookup">Update CPE dictionary</a>
 			</p>
 			<p class="description"><?php echo esc_html( $description ); ?></p>
 		</div>
@@ -108,7 +110,13 @@ class OptionsPageController {
 
 		if ( isset( $_GET['update'] ) && ! empty( $_GET['update'] ) ) {
 			echo '<pre>';
-			print_r( \Sepbit\WpBom\Controllers\DependencyTrackController::update() );
+			print_r( DependencyTrackController::update() );
+			echo '</pre>';
+		}
+
+		if ( isset( $_GET['cpe'] ) && ! empty( $_GET['cpe'] ) ) {
+			echo '<pre>';
+			print_r( CpeDictionaryController::update() );
 			echo '</pre>';
 		}
 	}
