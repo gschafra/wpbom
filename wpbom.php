@@ -21,6 +21,9 @@ define( 'SEPBIT_WPBOM_PRE', '_wpbom' );
 
 require SEPBIT_WPBOM_DIR . 'vendor/autoload.php';
 
+register_activation_hook( __FILE__, array( __NAMESPACE__ . '\Controllers\PluginController', 'plugin_activation' ) );
+register_deactivation_hook( __FILE__, array( __NAMESPACE__ . '\Controllers\PluginController', 'plugin_deactivation' ) );
+
 add_action( 'admin_init', array( __NAMESPACE__ . '\Controllers\CycloneDXController', 'json' ) );
 add_action( 'cmb2_init', array( __NAMESPACE__ . '\Controllers\OptionsPageController', 'options_page' ) );
 add_action( 'upgrader_process_complete', array( __NAMESPACE__ . '\Controllers\DependencyTrackController', 'auto_update' ) );

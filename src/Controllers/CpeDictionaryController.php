@@ -43,8 +43,7 @@ class CpeDictionaryController {
 		return $dictionary;
 	}
 
-	public static function gunzip($file_name, $out_file_name)
-	{
+	public static function gunzip($file_name, $out_file_name){
 		// Raising this value may increase performance
 		$buffer_size = 4096; // read 4kb at a time
 		// Open our files (in binary mode)
