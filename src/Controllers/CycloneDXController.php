@@ -50,6 +50,7 @@ class CycloneDXController {
 					'name'     => 'wordpress',
 					'version'  => get_bloginfo( 'version' ),
 					'purl'     => 'pkg:deb/debian/wordpress@' . get_bloginfo( 'version' ),
+					'cpe'      => 'cpe:2.3:a:wordpress:wordpress:' . get_bloginfo( 'version' ) . ':-:*:*:*:*:*:*',
 					'licenses' => array(
 						array(
 							'license' => array(
@@ -74,8 +75,10 @@ class CycloneDXController {
 			$bom['components'][ $key ]['bom-ref'] = 'pkg:wordpress/plugins/' . $plugin['TextDomain'] . '@' . $plugin['Version'];
 			$bom['components'][ $key ]['name']    = $plugin['TextDomain'];
 			$bom['components'][ $key ]['version'] = $plugin['Version'];
-			// TODO #1: Guess PURL
-			$bom['components'][ $key ]['purl']    = 'pkg:wordpress/plugins/' . $plugin['TextDomain'] . '@' . $plugin['Version'];
+			// WordPress PURL not supported yet, see https://github.com/package-url/purl-spec/blob/master/PURL-TYPES.rst#other-candidate-types-to-define
+			// $bom['components'][ $key ]['purl']    = 'pkg:wordpress/plugins/' . $plugin['TextDomain'] . '@' . $plugin['Version'];
+			// TODO #1: Guess CPE
+			$bom['components'][ $key ]['cpe']    = 'cpe:2.3:a:rocklobster:contact_form_7:' . $plugin['Version'] . ':*:*:*:*:wordpress:*:*';
 
 			if ( ! empty( $plugin['Author'] ) ) {
 				$bom['components'][ $key ]['author'] = $plugin['Author'];
@@ -180,4 +183,14 @@ class CycloneDXController {
 			wp_send_json( self::bom() );
 		}
 	}
+
+	/**
+	 * @param $text_domain
+	 *
+	 * @return [string, string]|null
+	 */
+	public static function guess_cpe_vendor_and_product( $text_domain ) {
+
+	}
+
 }

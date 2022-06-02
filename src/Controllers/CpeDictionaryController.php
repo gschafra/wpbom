@@ -43,7 +43,7 @@ class CpeDictionaryController {
 		return $dictionary;
 	}
 
-	public static function gunzip($file_name, $out_file_name){
+	private static function gunzip($file_name, $out_file_name){
 		// Raising this value may increase performance
 		$buffer_size = 4096; // read 4kb at a time
 		// Open our files (in binary mode)
@@ -58,5 +58,15 @@ class CpeDictionaryController {
 		// Files are done, close files
 		fclose($out_file);
 		gzclose($file);
+	}
+
+	private static function populate_dict_db($dictionary) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'wpbom_cpe_dict';
+
+		$wpdb->query("TRUNCATE TABLE $table_name");
+
+
 	}
 }
