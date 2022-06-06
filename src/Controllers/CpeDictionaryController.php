@@ -22,6 +22,8 @@
 
 namespace Sepbit\WpBom\Controllers;
 
+use Prewk\XmlStringStreamer;
+
 /**
  * Class CpeDictionaryController
  */
@@ -39,6 +41,9 @@ class CpeDictionaryController {
 
 		// decompress from gz
 		static::gunzip($dictionary_archive, $dictionary);
+
+		// populate db
+		static::populate_dict_db($dictionary);
 
 		return $dictionary;
 	}
@@ -67,6 +72,10 @@ class CpeDictionaryController {
 
 		$wpdb->query("TRUNCATE TABLE $table_name");
 
+		$streamer = XmlStringStreamer::createStringWalkerParser($dictionary);
 
+		while ($node = $streamer->getNode()) {
+			$simpleXmlNode = simplexml_load_string($node);
+		}
 	}
 }
