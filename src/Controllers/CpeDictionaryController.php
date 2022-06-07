@@ -70,34 +70,39 @@ class CpeDictionaryController {
 
 		$table_name = $wpdb->prefix . 'wpbom_cpe_dict';
 
-		$wpdb->query("TRUNCATE TABLE $table_name");
+		$wpdb->query( "TRUNCATE TABLE $table_name" );
 
-		$streamer = XmlStringStreamer::createStringWalkerParser($dictionary);
+		$streamer = XmlStringStreamer::createStringWalkerParser( $dictionary );
 
-		ini_set('memory_limit','512M');
+		ini_set( 'memory_limit', '1G' );
 
-		while ($node = $streamer->getNode()) {
-			$simpleXmlNode = @new \SimpleXMLElement($node);
+		while ( $node = $streamer->getNode() ) {
+			try {
+				$simpleXmlNode = new \SimpleXMLElement($node);
+			} catch (\Exception $e) {
+				continue;
+			}
 
-			if ($simpleXmlNode->getName() === 'cpe-item')
-			{
+			if ( $simpleXmlNode->getName() === 'cpe-item' ) {
 				$cpe23Item = $simpleXmlNode->{'cpe-23:cpe23-item'};
 
-				if ($cpe23Item)
-				{
-					[,,,$vendor,$product] = explode(':', $cpe23Item->attributes()->name[0]);
+				if ( $cpe23Item ) {
+					[ , , , $vendor, $product, $version, , , , , $targetSoftware ] = explode( ':',
+						$cpe23Item->attributes()->name[0] );
 
-					$wpdb->query(
-						$wpdb->prepare(
-							"INSERT IGNORE INTO $table_name (vendor, product) VALUES (%s, %s)",
-							$vendor,
-							$product
-						)
-					);
+					if ( $targetSoftware === 'wordpress' ) {
+						$wpdb->query(
+							$wpdb->prepare(
+								"INSERT IGNORE INTO $table_name (vendor, product) VALUES (%s, %s)",
+								$vendor,
+								$product
+							)
+						);
+					}
 				}
 			}
 
-			unset($simpleXmlNode);
+			unset( $simpleXmlNode );
 		}
 	}
 }
