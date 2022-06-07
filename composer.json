@@ -10,7 +10,8 @@
   "require": {
     "cmb2/cmb2": "dev-master",
     "prewk/xml-string-streamer": "^1.2",
-    "ext-simplexml": "*"
+    "ext-simplexml": "*",
+    "ext-curl": "*"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",

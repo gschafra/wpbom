@@ -57,6 +57,6 @@
 
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sqlTable );
-			dbDelta( $sqlIndex );
+			$wpdb->query( $sqlIndex );
 		}
 	}

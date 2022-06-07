@@ -74,8 +74,30 @@ class CpeDictionaryController {
 
 		$streamer = XmlStringStreamer::createStringWalkerParser($dictionary);
 
+		ini_set('memory_limit','512M');
+
 		while ($node = $streamer->getNode()) {
-			$simpleXmlNode = simplexml_load_string($node);
+			$simpleXmlNode = @new \SimpleXMLElement($node);
+
+			if ($simpleXmlNode->getName() === 'cpe-item')
+			{
+				$cpe23Item = $simpleXmlNode->{'cpe-23:cpe23-item'};
+
+				if ($cpe23Item)
+				{
+					[,,,$vendor,$product] = explode(':', $cpe23Item->attributes()->name[0]);
+
+					$wpdb->query(
+						$wpdb->prepare(
+							"INSERT IGNORE INTO $table_name (vendor, product) VALUES (%s, %s)",
+							$vendor,
+							$product
+						)
+					);
+				}
+			}
+
+			unset($simpleXmlNode);
 		}
 	}
 }
