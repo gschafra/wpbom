@@ -78,7 +78,7 @@ class CpeDictionaryController {
 
 		while ( $node = $streamer->getNode() ) {
 			try {
-				$simpleXmlNode = new \SimpleXMLElement($node);
+				$simpleXmlNode = new \SimpleXMLElement($node, LIBXML_NOERROR, false, 'ws', true);
 			} catch (\Exception $e) {
 				continue;
 			}
