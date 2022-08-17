@@ -94,11 +94,11 @@ class OptionsPageController {
 		$cpeUpdate = add_query_arg( 'cpe', 'true', $url );
 		?>
 		<div class="custom-field-row <?php echo esc_attr( $classes ); ?>">
-			<p>
+			<div class="button-row">
 				<a class="button button-secondary" href="<?php esc_html_e( $update ); ?>">Manual update</a>
 				<a class="button button-secondary" href="<?php esc_html_e( $download ); ?>">Download BOM file</a>
-				<a class="button button-secondary" href="<?php esc_html_e( $cpeUpdate ); ?>" title="For PURL component lookup">Update CPE dictionary</a>
-			</p>
+				<button class="button button-secondary button-with-loader wpbom-update-cpe-update" title="For PURL component lookup"><div class="custom-loader"></div>Update CPE dictionary</button>
+			</div>
 			<p class="description"><?php echo esc_html( $description ); ?></p>
 		</div>
 		<?php
@@ -119,5 +119,11 @@ class OptionsPageController {
 			print_r( CpeDictionaryController::update() );
 			echo '</pre>';
 		}
+
+		wp_register_script( 'wpbom.js', SEPBIT_WPBOM_URL . 'src/Assets/js/wpbom.js', ['jquery'], SEPBIT_WPBOM_VER );
+		wp_enqueue_script( 'wpbom.js' );
+
+		wp_register_style( 'wpbom.css', SEPBIT_WPBOM_URL . 'src/Assets/js/wpbom.css', [], SEPBIT_WPBOM_VER );
+		wp_enqueue_style( 'wpbom.css' );
 	}
 }
