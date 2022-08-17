@@ -29,3 +29,4 @@ add_action( 'cmb2_init', array( __NAMESPACE__ . '\Controllers\OptionsPageControl
 add_action( 'upgrader_process_complete', array( __NAMESPACE__ . '\Controllers\DependencyTrackController', 'auto_update' ) );
 add_action( 'deleted_plugin', array( __NAMESPACE__ . '\Controllers\DependencyTrackController', 'auto_update' ) );
 add_action( 'deleted_theme', array( __NAMESPACE__ . '\Controllers\DependencyTrackController', 'auto_update' ) );
+add_action( 'wp_ajax_wpbom_update_cpe_dict', array( __NAMESPACE__ . '\Controllers\OptionsPageController', 'update_cpe_dict' ) );

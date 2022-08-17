@@ -1,7 +1,8 @@
 jQuery( document ).ready( function( $ ) {
 	$('button.wpbom-update-cpe-update').click( function( e ) {
 		e.preventDefault();
-		alert('blub');
+		var nonce = $(this).data('nonce');
+		alert(nonce);
 		/*var $this = $(this);
 		var $form = $this.closest('form');
 		var $spinner = $this.find('.spinner');

@@ -92,12 +92,18 @@ class OptionsPageController {
 		$update   = add_query_arg( 'update', 'true', $url );
 		$download = add_query_arg( 'download', 'true', $url );
 		$cpeUpdate = add_query_arg( 'cpe', 'true', $url );
+
+		// Implement ajax call according to
+		// https://wpmudev.com/blog/using-ajax-with-wordpress/
+		// https://developer.wordpress.org/reference/hooks/wp_ajax_action/
+		// https://developer.wordpress.org/plugins/javascript/ajax/
+		$update_cpe_dict_nonce = wp_create_nonce('update_cpe_dict_nonce');
 		?>
 		<div class="custom-field-row <?php echo esc_attr( $classes ); ?>">
 			<div class="button-row">
 				<a class="button button-secondary" href="<?php esc_html_e( $update ); ?>">Manual update</a>
 				<a class="button button-secondary" href="<?php esc_html_e( $download ); ?>">Download BOM file</a>
-				<button class="button button-secondary button-with-loader wpbom-update-cpe-update" title="For PURL component lookup"><div class="custom-loader"></div>Update CPE dictionary</button>
+				<button class="button button-secondary button-with-loader wpbom-update-cpe-update" title="For PURL component lookup" data-nonce="<?php esc_html_e( $update_cpe_dict_nonce ); ?>"><div class="custom-loader"></div>Update CPE dictionary</button>
 			</div>
 			<p class="description"><?php echo esc_html( $description ); ?></p>
 		</div>
@@ -126,4 +132,10 @@ class OptionsPageController {
 		wp_register_style( 'wpbom.css', SEPBIT_WPBOM_URL . 'src/Assets/js/wpbom.css', [], SEPBIT_WPBOM_VER );
 		wp_enqueue_style( 'wpbom.css' );
 	}
+
+	public static function update_cpe_dict($data)
+	{
+
+	}
+
 }
