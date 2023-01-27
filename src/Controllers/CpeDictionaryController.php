@@ -65,6 +65,13 @@ class CpeDictionaryController {
 		gzclose($file);
 	}
 
+	/**
+	 * Populate dictionary table in DB
+	 *
+	 * @param $dictionary
+	 *
+	 * @return int
+	 */
 	private static function populate_dict_db($dictionary) {
 		global $wpdb;
 
@@ -75,6 +82,8 @@ class CpeDictionaryController {
 		$streamer = XmlStringStreamer::createStringWalkerParser( $dictionary );
 
 		ini_set( 'memory_limit', '1G' );
+
+		$count = 0;
 
 		while ( $node = $streamer->getNode() ) {
 			try {
@@ -98,11 +107,15 @@ class CpeDictionaryController {
 								$product
 							)
 						);
+
+						$count++;
 					}
 				}
 			}
 
 			unset( $simpleXmlNode );
 		}
+
+		return $count;
 	}
 }

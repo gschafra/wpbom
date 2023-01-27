@@ -103,7 +103,7 @@ class OptionsPageController {
 			<div class="button-row">
 				<a class="button button-secondary" href="<?php esc_html_e( $update ); ?>">Manual update</a>
 				<a class="button button-secondary" href="<?php esc_html_e( $download ); ?>">Download BOM file</a>
-				<button class="button button-secondary button-with-loader wpbom-update-cpe-update" title="For PURL component lookup" data-nonce="<?php esc_html_e( $update_cpe_dict_nonce ); ?>"><div class="custom-loader"></div>Update CPE dictionary</button>
+				<button class="button button-secondary button-with-loader wpbom-update-cpe-update" title="For PURL component lookup" data-nonce="<?php esc_html_e( $update_cpe_dict_nonce ); ?>"><div class="custom-loader hidden"></div>Update CPE dictionary</button>
 			</div>
 			<p class="description"><?php echo esc_html( $description ); ?></p>
 		</div>
@@ -133,9 +133,13 @@ class OptionsPageController {
 		wp_enqueue_style( 'wpbom.css' );
 	}
 
-	public static function update_cpe_dict($data)
+	public static function update_cpe_dict()
 	{
+		check_ajax_referer( 'update_cpe_dict_nonce' );
 
+		$result = CpeDictionaryController::update();
+
+		wp_send_json_success( true );
 	}
 
 }
