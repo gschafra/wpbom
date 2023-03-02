@@ -72,13 +72,8 @@ class CycloneDXController {
 			}
 
 			$bom['components'][ $key ]['type']    = 'application';
-			$bom['components'][ $key ]['bom-ref'] = 'pkg:wordpress/plugins/' . $plugin['TextDomain'] . '@' . $plugin['Version'];
 			$bom['components'][ $key ]['name']    = $plugin['TextDomain'];
 			$bom['components'][ $key ]['version'] = $plugin['Version'];
-			// WordPress PURL not supported yet, see https://github.com/package-url/purl-spec/blob/master/PURL-TYPES.rst#other-candidate-types-to-define
-			// $bom['components'][ $key ]['purl']    = 'pkg:wordpress/plugins/' . $plugin['TextDomain'] . '@' . $plugin['Version'];
-			// TODO #1: Guess CPE
-			$bom['components'][ $key ]['cpe']    = 'cpe:2.3:a:rocklobster:contact_form_7:' . $plugin['Version'] . ':*:*:*:*:wordpress:*:*';
 
 			if ( ! empty( $plugin['Author'] ) ) {
 				$bom['components'][ $key ]['author'] = $plugin['Author'];
@@ -111,6 +106,13 @@ class CycloneDXController {
 					'type'    => 'website',
 				);
 			}
+
+			// TODO #1: Guess author and use it instead of "plugins"
+			$bom['components'][ $key ]['bom-ref'] = 'pkg:wordpress/plugins/' . $plugin['TextDomain'] . '@' . $plugin['Version'];
+			// WordPress PURL not supported yet, see https://github.com/package-url/purl-spec/blob/master/PURL-TYPES.rst#other-candidate-types-to-define
+			// $bom['components'][ $key ]['purl']    = 'pkg:wordpress/plugins/' . $plugin['TextDomain'] . '@' . $plugin['Version'];
+			// TODO #1: Guess CPE
+			$bom['components'][ $key ]['cpe']    = 'cpe:2.3:a:rocklobster:contact_form_7:' . $plugin['Version'] . ':*:*:*:*:wordpress:*:*';
 
 			$key++;
 		}
@@ -185,11 +187,19 @@ class CycloneDXController {
 	}
 
 	/**
-	 * @param $text_domain
+	 * @param string $text_domain
+	 * @param string|null $author
 	 *
 	 * @return [string, string]|null
 	 */
-	public static function guess_cpe_vendor_and_product( $text_domain ) {
+	public static function guess_cpe_vendor_and_product( $text_domain, $author ) {
+		// TODO #1: Implement matching text domain and author agains CPE dict's vendor and product
+		// Using various strategies like natural language matching
+		// https://dev.mysql.com/doc/refman/8.0/en/fulltext-natural-language.html
+		// or SOUNDS LIKE
+		// or exact matching with non-digit/word character substitution (- => _)
+		// i.e. REGEXP_REPLACE(product, '[^a-zA-Z0-9]', '') = REGEXP_REPLACE('contact-form.7', '[^a-zA-Z0-9]', '')
+		// to find the best single match
 
 	}
 

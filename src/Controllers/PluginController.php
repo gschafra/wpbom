@@ -53,10 +53,18 @@
 				product varchar(250) DEFAULT '' NOT NULL
 			) $charset_collate;";
 
-			$sqlIndex = "CREATE UNIQUE INDEX ${table_name}_vendor_product_uindex ON $table_name (vendor, product);";
+			$sqlIndices = [
+				"CREATE UNIQUE INDEX ${table_name}_vendor_product_uindex ON $table_name (vendor, product);",
+				"CREATE FULLTEXT INDEX `wp_wpbom_cpe_dict_product_ftindex` (`product`);",
+				"CREATE FULLTEXT INDEX `wp_wpbom_cpe_dict_vendor_ftindex` (`vendor`);",
+				"CREATE FULLTEXT INDEX `wp_wpbom_cpe_dict_vendor_product_ftindex` (`vendor`, `product`);",
+			];
 
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sqlTable );
-			$wpdb->query( $sqlIndex );
+
+			foreach ( $sqlIndices as $sqlIndex ) {
+				$wpdb->query( $sqlIndex );
+			}
 		}
 	}

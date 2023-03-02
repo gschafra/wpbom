@@ -79,10 +79,10 @@ class CpeDictionaryController {
 
 		$wpdb->query( "TRUNCATE TABLE $table_name" );
 
-		$streamer = XmlStringStreamer::createStringWalkerParser(
+		$streamer = XmlStringStreamer::createUniqueNodeParser(
 			$dictionary,
 			[
-				'captureDepth' => 3
+				'uniqueNode' => 'cpe-item',
 			]
 		);
 
@@ -92,15 +92,13 @@ class CpeDictionaryController {
 
 		while ( $node = $streamer->getNode() ) {
 			try {
-				$simpleXmlNode = new \SimpleXMLElement($node, LIBXML_NOERROR, false, 'ws', true);
+				$simpleXmlNode = simplexml_load_string( trim($node));
 			} catch (\Exception $e) {
 				continue;
 			}
 
-			if ( $simpleXmlNode->getName() === 'cpe-item' ) {
-				$cpe23Item = $simpleXmlNode->{'cpe-23:cpe23-item'};
-
-				if ( $cpe23Item ) {
+			try {
+				if ( $cpe23Item = $simpleXmlNode->{'cpe-23:cpe23-item'} ) {
 					[ , , , $vendor, $product, $version, , , , , $targetSoftware ] = explode( ':',
 						$cpe23Item->attributes()->name[0] );
 
@@ -116,6 +114,8 @@ class CpeDictionaryController {
 						$count++;
 					}
 				}
+			} catch (\Exception $e) {
+				continue;
 			}
 
 			unset( $simpleXmlNode );
