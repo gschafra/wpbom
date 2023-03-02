@@ -79,7 +79,12 @@ class CpeDictionaryController {
 
 		$wpdb->query( "TRUNCATE TABLE $table_name" );
 
-		$streamer = XmlStringStreamer::createStringWalkerParser( $dictionary );
+		$streamer = XmlStringStreamer::createStringWalkerParser(
+			$dictionary,
+			[
+				'captureDepth' => 3
+			]
+		);
 
 		ini_set( 'memory_limit', '1G' );
 
